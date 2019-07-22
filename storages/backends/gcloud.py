@@ -268,8 +268,10 @@ class GoogleCloudStorage(Storage):
         name = self._normalize_name(clean_name(name))
         blob = self.bucket.blob(self._encode_name(name))
 
+        name = self._normalize_name(clean_name(name))
+
         if self.default_acl == 'publicRead':
-            return blob.public_url
+            return "{}/{}".format(setting('MEDIA_URL'), name)
         return blob.generate_signed_url(self.expiration)
 
     def get_available_name(self, name, max_length=None):
