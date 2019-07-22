@@ -163,6 +163,7 @@ class GoogleCloudStorage(Storage):
         content.name = cleaned_name
         encoded_name = self._encode_name(name)
         file = GoogleCloudFile(encoded_name, 'rw', self)
+        file.blob.content_encoding = 'gzip'
         file.blob.upload_from_file(content, size=content.size,
                                    content_type=file.mime_type,
                                    predefined_acl=self.auto_create_acl)
