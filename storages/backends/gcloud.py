@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_bytes, smart_str
 
+import urlparse
+
 from storages.utils import (
     check_location, clean_name, get_available_overwrite_name, safe_join,
     setting,
@@ -271,8 +273,10 @@ class GoogleCloudStorage(Storage):
         name = self._normalize_name(clean_name(name))
 
         if self.default_acl == 'publicRead':
-            name = name.lstrip("/").lstrip("media/")
-            return "{}media/{}".format(setting('MEDIA_URL'), name)
+            url = blob.public_url
+            parsed = urlparse.urlparse(url)
+            replaced_url = parsed._replacee(netloc="cdn.tophatch.com")
+            return replaced_url
         return blob.generate_signed_url(self.expiration)
 
     def get_available_name(self, name, max_length=None):
