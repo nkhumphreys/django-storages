@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.encoding import force_bytes, smart_str
 
-import urlparse
+from urlparse import urlparse
 
 from storages.utils import (
     check_location, clean_name, get_available_overwrite_name, safe_join,
