@@ -275,8 +275,8 @@ class GoogleCloudStorage(Storage):
 
         if self.default_acl == 'publicRead':
             object_url = blob.public_url
-            filename = os.path.basename(urlparse.urlsplit(object_url)
-            return settings.MEDIA_URL + filename
+            filepath = urlparse(object_url).path.lstrip('/').lstrip('tophatch/media/')
+            return settings.MEDIA_URL + filepath
         return blob.generate_signed_url(self.expiration)
 
     def get_available_name(self, name, max_length=None):
