@@ -1,6 +1,7 @@
 import mimetypes
 from datetime import timedelta
 from tempfile import SpooledTemporaryFile
+import os
 
 from django.core.exceptions import ImproperlyConfigured, SuspiciousOperation
 from django.core.files.base import File
@@ -273,10 +274,9 @@ class GoogleCloudStorage(Storage):
         name = self._normalize_name(clean_name(name))
 
         if self.default_acl == 'publicRead':
-            url = blob.public_url
-            parsed = urlparse.urlparse(url)
-            replaced_url = parsed._replacee(netloc="cdn.tophatch.com")
-            return replaced_url
+            object_url = blob.public_url
+            filename = os.path.basename(urlparse.urlsplit(object_url)
+            return settings.MEDIA_URL + filename
         return blob.generate_signed_url(self.expiration)
 
     def get_available_name(self, name, max_length=None):
