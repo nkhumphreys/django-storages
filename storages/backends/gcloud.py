@@ -274,7 +274,10 @@ class GoogleCloudStorage(Storage):
 
         if self.default_acl == 'publicRead':
             object_url = blob.public_url
-            filepath = urlparse(object_url).path.lstrip('/').lstrip('tophatch/media/')
+            filepath = urlparse(object_url).path.lstrip('/')
+            prefix = 'tophatch/media/'
+            if filepath.startswith(prefix):
+                filepath = filepath[len(prefix):]
             return setting('MEDIA_URL') + filepath
         return blob.generate_signed_url(self.expiration)
 
